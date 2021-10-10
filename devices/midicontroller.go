@@ -149,7 +149,9 @@ func (mc *midiControl) SendCommand(controller uint8, value uint8, repeat bool) e
 
 // Close stops the goroutine and closes all channels and drivers
 func (mc *midiControl) Close() error {
-	close(mc.quitch)
+	if mc.quitch != nil {
+		close(mc.quitch)
+	}
 
 	errout := mc.output.Close()
 	errdrv := mc.drv.Close()

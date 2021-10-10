@@ -7,7 +7,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"time"
 
@@ -129,11 +128,10 @@ func startListeners(midiname string, se *devices.ShuttlExpress) {
 
 	mcontrol = devices.NewMIDIController(nil, midiname, 250*time.Millisecond, 0)
 	if err := mcontrol.Open(); err != nil {
-		fmt.Printf("Unable to open MIDI device: %v\n", err)
-		os.Exit(1)
+		dlgs.Error(applicationName, "Unable to open MIDI device. Please select the correct device in the context menu.\n"+err.Error())
+	} else {
+		go readshuttle(quitch, se, mcontrol)
 	}
-
-	go readshuttle(quitch, se, mcontrol)
 }
 
 // onReady is called by systray once the system tray menu can be created. It inializes the menu and opens the ShuttlExpress device
