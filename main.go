@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const applicationName = "ShuttleMidi v0.1"
+const applicationName = "ShuttleMidi v0.1.0"
 
 var (
 	// configDefaults contain the default configuration written to the configuration file
