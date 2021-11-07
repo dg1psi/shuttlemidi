@@ -66,7 +66,9 @@ func (mc *midiControl) commandExecutor() {
 			return
 		case cmd := <-mc.commandch:
 			log.Printf("Controller: %v, Value: %v, Repeat: %v\n", cmd.controller, cmd.value, cmd.repeat)
-			writer.ControlChange(mc.wr, cmd.controller, cmd.value)
+			if cmd.value <= 127 {
+				writer.ControlChange(mc.wr, cmd.controller, cmd.value)
+			}
 			if cmd.repeat {
 				repeatcmd[cmd.controller] = tickstruct{counter: midiMaxRepeat, value: cmd.value}
 				tick.Reset(mc.Delay)

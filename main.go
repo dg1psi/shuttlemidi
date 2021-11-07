@@ -48,12 +48,13 @@ func readshuttle(quitch chan struct{}, se *devices.ShuttlExpress, mc devices.Mid
 			return
 		case wp := <-se.Wheel_position:
 			if wp > 0 && wp <= 7 {
-				mc.SendCommand(0, uint8(18*wp), true)
+				// Invert positive wheel positions to work around bug in SDR Console with Tune Up
+				mc.SendCommand(0, 7*18-uint8(18*wp), true)
 			} else if wp >= -7 && wp < 0 {
 				mc.SendCommand(1, uint8(18*(-wp)), true)
 			} else {
-				mc.SendCommand(0, 0, false)
-				mc.SendCommand(1, 0, false)
+				mc.SendCommand(0, 255, false)
+				mc.SendCommand(1, 255, false)
 			}
 		case dd := <-se.Dial_direction:
 			if dd == 1 {
@@ -126,7 +127,7 @@ func startListeners(midiname string, se *devices.ShuttlExpress) {
 	}
 	quitch = make(chan struct{})
 
-	mcontrol = devices.NewMIDIController(nil, midiname, 250*time.Millisecond, 0)
+	mcontrol = devices.NewMIDIController(nil, midiname, 100*time.Millisecond, 0)
 	if err := mcontrol.Open(); err != nil {
 		dlgs.Error(applicationName, "Unable to open MIDI device. Please select the correct device in the context menu.\n"+err.Error())
 	} else {
