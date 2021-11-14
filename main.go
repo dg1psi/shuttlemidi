@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const applicationName = "ShuttleMidi v0.1.1"
+const applicationName = "ShuttleMidi v0.1.2"
 
 var (
 	// configDefaults contain the default configuration written to the configuration file
@@ -49,7 +49,7 @@ func readshuttle(quitch chan struct{}, se *devices.ShuttlExpress, mc devices.Mid
 		case wp := <-se.Wheel_position:
 			if wp > 0 && wp <= 7 {
 				// Invert positive wheel positions to work around bug in SDR Console with Tune Up
-				mc.SendCommand(0, 7*18-uint8(18*wp), true)
+				mc.SendCommand(0, uint8(18*(8-wp)), true)
 			} else if wp >= -7 && wp < 0 {
 				mc.SendCommand(1, uint8(18*(-wp)), true)
 			} else {
