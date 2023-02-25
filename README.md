@@ -8,7 +8,7 @@ ShuttleMIDI doesn't provide it's own MIDI driver for Windows. It relies on the e
 2. Add a loopback MIDI port called "ShuttleMIDI" in the loopMIDI control panel
 3. Build the application or download the latest release from the ["Releases" section](https://github.com/dg1psi/shuttlemidi/releases).
 ```
-go build -ldflags "-linkmode external -extldflags -static -H=windowsgui" -a
+go build -ldflags "-linkmode external -extldflags -static -s -w -H=windowsgui" -a
 ```
 4. Run the "shuttlemidi.exe" file
 5. Open SDR Console
